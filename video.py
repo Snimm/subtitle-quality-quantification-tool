@@ -16,6 +16,9 @@ logging.debug("staring video.py")
 
 
 class text_extractor():
+    def find_image_shape(img):
+        return img.shape
+
 
     @staticmethod
     def load_easyocr():
@@ -56,3 +59,5 @@ class text_extractor():
         # show the output image
         plt.imshow(img)
         plt.show()
+
+    
