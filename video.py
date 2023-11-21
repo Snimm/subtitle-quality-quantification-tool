@@ -12,7 +12,7 @@ logging.config.dictConfig({
     'disable_existing_loggers': True,
 })
 
-print("staring video.py")
+logging.debug("staring video.py")
 
 
 class text_extractor():
