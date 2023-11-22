@@ -42,28 +42,10 @@ class Bbox():
         yA = max(boxA[1], boxB[1])
         xB = min(boxA[2], boxB[2])
         yB = min(boxA[3], boxB[3])
-        return max(0, xB - xA + 1) * max(0, yB - yA + 1)
-    @staticmethod    
-    def bbox_union(boxA, boxB):
-        # compute the area of both the prediction and ground-truth
-        # rectangles
-        # compute the intersection over union by taking the intersection
-        # area and dividing it by the sum of prediction + ground-truth
-        # areas - the interesection area
-        boxAArea = (boxA[2] - boxA[0] + 1) * (boxA[3] - boxA[1] + 1)
-        boxBArea = (boxB[2] - boxB[0] + 1) * (boxB[3] - boxB[1] + 1)
-        return float(boxAArea + boxBArea - Bbox.bbox_intersection(boxA, boxB))
-    @staticmethod
-    def bbox_intersection_over_union(boxA, boxB):
-	# determine the (x, y)-coordinates of the intersection rectangle
-        interArea = Bbox.bbox_intersection(boxA, boxB)
-        iou = interArea / Bbox.bbox_union(boxA, boxB)
-        # return the intersection over union value
-        return iou
+        return abs(max((xB - xA, 0)) * max((yB - yA), 0))
     
     @staticmethod
     def find_obstruction(details, sub_box_array):
-
         logging.debug(f"sub_box_array: {sub_box_array}")
         logging.debug(f"details: {details}")
         txt_box_array = Bbox.get_bbox_from_details(details)
@@ -80,6 +62,7 @@ class Bbox():
                 obstruction += (Bbox.bbox_intersection(sub_box, txt_box))
 
         return obstruction
+    
     @staticmethod
     def draw_white_black_rec(bbox, img, text, color):
         color1, color2 = color
@@ -102,8 +85,3 @@ class Bbox():
         #                 cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 0), 1)
         #     cv2.putText(img, text, (tl2[0], tl2[1] - 10), 
         #                 cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 1)
- 
-
-
-if __name__ == "__main__":
-    assert 5175 == Bbox.find_obstruction([([[68, 134], [274, 134], [274, 158], [68, 158]], 'WORLD BREAKING NEWS', 0.8607316213096277)], [[[68, 134], [274, 134], [274, 158], [68, 158]]])
