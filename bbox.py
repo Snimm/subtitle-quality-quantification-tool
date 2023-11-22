@@ -1,5 +1,6 @@
 
 import logging
+import cv2
 logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s -  %(levelname)s -  %(message)s')
 
 import logging.config
@@ -79,6 +80,29 @@ class Bbox():
                 obstruction += (Bbox.bbox_intersection(sub_box, txt_box))
 
         return obstruction
+    
+    def draw_white_black_rec(bbox, img, text, color):
+        color1, color2 = color
+
+        (tl, tr, br, bl) = bbox
+        tl = (int(tl[0]), int(tl[1]))
+        tr = (int(tr[0]), int(tr[1]))
+        br = (int(br[0]), int(br[1]))
+        bl = (int(bl[0]), int(bl[1]))
+        tl2 = (int(tl[0])+1, int(tl[1])+1)
+        tr2= (int(tr[0])+1, int(tr[1])+1)
+        br2 = (int(br[0])+1, int(br[1])+1)
+        bl2 = (int(bl[0])+1, int(bl[1])+1)
+        #Put rectangles and text on the image
+        cv2.rectangle(img, tl, br, color1, 1)
+        cv2.rectangle(img, tl2, br2, color2, 1)
+        # if text != None:
+        #     text = "".join([c if ord(c) < 128 else "" for c in text]).strip()
+        #     cv2.putText(img, text, (tl[0], tl[1] - 10), 
+        #                 cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 0), 1)
+        #     cv2.putText(img, text, (tl2[0], tl2[1] - 10), 
+        #                 cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 1)
+ 
 
 
 if __name__ == "__main__":

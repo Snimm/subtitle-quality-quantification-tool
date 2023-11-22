@@ -11,7 +11,7 @@ logging.config.dictConfig({
     'version': 1,
     'disable_existing_loggers': True,
 })
-
+import bbox
 logging.debug("staring video.py")
 
 
@@ -39,25 +39,27 @@ class text_extractor():
         return bboxs
     
     
-    def showb_details(details_from_image, img):
-        for (bbox, text, prob) in details_from_image:
+    def showb_details(details_from_image, img, display):
+        for (ibbox, text, prob) in details_from_image:
+            bbox.Bbox.draw_white_black_rec(ibbox, img, text, ((0,255,0),(255,0,255)))
+            # #Define bounding boxes
+            # (tl, tr, br, bl) = bbox
+            # tl = (int(tl[0]), int(tl[1]))
+            # tr = (int(tr[0]), int(tr[1]))
+            # br = (int(br[0]), int(br[1]))
+            # bl = (int(bl[0]), int(bl[1]))
             
-            #Define bounding boxes
-            (tl, tr, br, bl) = bbox
-            tl = (int(tl[0]), int(tl[1]))
-            tr = (int(tr[0]), int(tr[1]))
-            br = (int(br[0]), int(br[1]))
-            bl = (int(bl[0]), int(bl[1]))
-            
-            #Remove non-ASCII characters to display clean text on the image (using opencv)
-            text = "".join([c if ord(c) < 128 else "" for c in text]).strip()
+            # #Remove non-ASCII characters to display clean text on the image (using opencv)
+            # text = "".join([c if ord(c) < 128 else "" for c in text]).strip()
         
-            #Put rectangles and text on the image
-            cv2.rectangle(img, tl, br, (0, 0, 0), 2)
-            cv2.putText(img, text, (tl[0], tl[1] - 10), 
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 0), 2)
+            # #Put rectangles and text on the image
+            # cv2.rectangle(img, tl, br, (0, 0, 0), 2)
+            # cv2.putText(img, text, (tl[0], tl[1] - 10), 
+            #             cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 0), 2)
         # show the output image
-        plt.imshow(img)
-        plt.show()
+        if display == True:
+            plt.imshow(img)
+            plt.show()
 
-    
+
+

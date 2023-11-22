@@ -8,7 +8,7 @@ logging.config.dictConfig({
     'version': 1,
     'disable_existing_loggers': True,
 })
-
+import bbox
 
 
 class Subtitle():
@@ -26,19 +26,12 @@ class Subtitle():
 
         return [[[0, .7*height], [width, .7*height], [width, height], [0, height]]]
     
-    def show_sub(subbox, img):
-        for bbox in subbox:
-    
-    #Define bounding boxes
-            (tl, tr, br, bl) = bbox
-            tl = (int(tl[0]), int(tl[1]))
-            tr = (int(tr[0]), int(tr[1]))
-            br = (int(br[0]), int(br[1]))
-            bl = (int(bl[0]), int(bl[1]))
-            logging.debug(f"tl {tl} tr {tr} br {br} bl {bl}")
-            #Put rectangles and text on the image
-            cv2.rectangle(img, tl, br, (0, 0, 0), 2)
+    def show_sub(subbox, img, display):
+        for ibbox in subbox:
+            bbox.Bbox.draw_white_black_rec(ibbox, img, None, ((0,0,0),(255,255,255)))
         # show the output image
-        plt.imshow(img)
-        plt.show()
+        if display:
+            plt.imshow(img)
+            plt.show()
+        return img
 
