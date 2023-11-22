@@ -80,7 +80,7 @@ class Bbox():
                 obstruction += (Bbox.bbox_intersection(sub_box, txt_box))
 
         return obstruction
-    
+    @staticmethod
     def draw_white_black_rec(bbox, img, text, color):
         color1, color2 = color
 
