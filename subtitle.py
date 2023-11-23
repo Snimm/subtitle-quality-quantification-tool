@@ -9,7 +9,6 @@ logging.config.dictConfig({
 })
 import bbox
 
-from subtitle_parser import srt
 
 class Subtitle():
 
@@ -18,7 +17,7 @@ class Subtitle():
         return -1  # Default to top position
 
     @staticmethod
-    def find_sub_box(img_dim, percent_start_width = 10, percent_end_width = 90, percent_start_height = 85, percent_end_height = 100):
+    def get_general_sub_area(img_dim, percent_start_width = 10, percent_end_width = 90, percent_start_height = 85, percent_end_height = 100):
         logging.debug(f"Image shape: {img_dim}")
         height = img_dim[1]
         width = img_dim[0]

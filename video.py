@@ -111,8 +111,8 @@ def obstruction_from_image(img: cv2.Mat, reader: easyocr.Reader, subbox: list) -
     return relative_obstruction
 
 # Define video analysis function
-def analye_video(cam: cv2.VideoCapture, subbox: list, reader: easyocr.Reader, display_image: bool, save_image: bool, every_what_frame: int):
-
+def analye_video(cam: cv2.VideoCapture, subbox: list, reader: easyocr.Reader, display_image: bool, save_image: bool, every_what_frame: int) -> list:
+    issue_frames = []
     create_issue_frames = True
 
     # Create a folder to store frames with position issues
@@ -137,10 +137,16 @@ def analye_video(cam: cv2.VideoCapture, subbox: list, reader: easyocr.Reader, di
             if frame_count % every_what_frame == 0:
                 logging.debug(f"frame width and height {frame.shape}")
                 # Calculate obstruction
+            
+
+
                 obs = obstruction_from_image(frame, reader, subbox)
                 obs_arr.append(obs)
                 logging.debug(f"Obstruction: {obs}, Frame: {frame_count}")
 
+                if obs > 0:
+                    issue_frames.append(frame_count)
+    
                 # Create issue frames if necessary
                 if create_issue_frames and obs > 0:
                     ob_loc.append(frame_count)
@@ -159,3 +165,5 @@ def analye_video(cam: cv2.VideoCapture, subbox: list, reader: easyocr.Reader, di
     avg_obs_frame = sum(obs_arr) / len(obs_arr)
     logging.debug(f"Average obstruction per frame: {avg_obs_frame}")
     logging.debug(f"Subbox: {subbox}")
+    return issue_frames
+
