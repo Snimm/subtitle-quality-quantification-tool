@@ -13,44 +13,49 @@ import search_sub
 class Subtitle():
 
     @staticmethod
-    def get_position_top_down():  # Return 1 for top, -1 for bottom, or 0 for center
-        return -1  # Default to top position
+    def get_position_top_down():  
+        #TODO
+        # Return 1 for top, -1 for bottom
+        return -1  # Default to bottom position
 
     @staticmethod
-    def get_general_sub_area(img_dim, percent_start_width = 10, percent_end_width = 90, percent_start_height = 85, percent_end_height = 100):
-        logging.debug(f"Image shape: {img_dim}")
-        height = img_dim[1]
-        width = img_dim[0]
+    def get_general_sub_area(video_dimensions: tuple, percent_start_width: float = 10.0, percent_end_width: float = 90.0, percent_start_height: float = 85.0, percent_end_height: float = 100.0):        
+        """Calculates the general subtitle area based on specified percentages"""
+        height, width = video_dimensions
 
         tl_x = percent_start_width*width*0.01
         tr_x = percent_end_width*width*0.01
         
         # Adjust the subbox position based on the configured position
         position_top_bottom = Subtitle.get_position_top_down()
-        if position_top_bottom == -1:  # Bottom position
-                    # Assume the bottom 15% of the image contains the subtitle
+        if position_top_bottom == -1: 
+            # Bottom position
+            # Assume the bottom 15% of the image contains the subtitle
             tl_y = percent_start_height*height*0.01
             br_y = percent_end_height*height*0.01
 
-        elif position_top_bottom == 1:  # top  position
+        elif position_top_bottom == 1:  
+            # top  position
             # Assume the top 15% of the image contains the subtitle
             tl_y = height - percent_end_height*height*0.01
             br_y = height - percent_start_height*height*0.01
+        else:
+            raise ValueError("Invalid subtitle position: " + str(position_top_bottom))
 
         bl_x = tl_x
         bl_y = br_y
         tr_y = tl_y
         br_x = tr_x
 
-        
+        # Construct the subtitle box using the calculated coordinates
         subbox = [[[tl_x, tl_y], [tr_x, tr_y], [br_x, br_y], [bl_x, bl_y]]]
         logging.debug(f"subbox_arr: {subbox}")
         return subbox
 
-    # def get_subbox(gen_subbox_area, frame, subtitle):
-    #     list_1sub = []
-    #     text = search_sub.search_text_in_frame(132, list_1sub)
-    #     print(text)
+    def get_subbox(gen_subbox_area, frame, subtitle):
+        list_1sub = []
+        text = search_sub.search_text_in_frame(132, list_1sub)
+        print(text)
 
 
     @staticmethod

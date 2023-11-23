@@ -31,15 +31,15 @@ def main(video_path):
     fps = cam.get(cv2.CAP_PROP_FPS)
     frame_count = cam.get(cv2.CAP_PROP_FRAME_COUNT)
     subtitles = parser.parse(sub_path)
-    list_1sub = search_sub.create_sub_struct(subtitles, fps)
+    list_1sub = search_sub.create_subtitle_structure(subtitles, fps)
     print("Video details:")
     print(f"fps: {fps}, frame_count: {frame_count}, width: {width_cam} px, height: {height_cam} px, lenght: {frame_count/fps} sec")
 
-    img_dim = (width_cam, height_cam)
+    img_dim = (height_cam, width_cam )
     subbox_area = subtitle.Subtitle.get_general_sub_area(img_dim)
 
     # Analyze the video
-    video.analye_video(cam, subbox_area, reader, True, False, 1, list_1sub )
+    video.analye_video(cam, subbox_area, reader, True, False, 500, list_1sub )
 
 if __name__ == '__main__':
     # Run the main function

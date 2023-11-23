@@ -137,7 +137,7 @@ def analye_video(cam: cv2.VideoCapture, subbox: list, reader: easyocr.Reader, di
             if frame_count % every_what_frame == 0:
 
                 text = search_sub.search_text_in_frame(frame_count,list_1sub)
-                #if there is not text set subbox to 0s
+                #if there is no text set subbox to 0s
                 if len(text) == 0:
                     subbox = [[[0, 0], [0, 0], [0, 0], [0, 0]]]
                 logging.debug(f"subbox after potential reset: {subbox}")
