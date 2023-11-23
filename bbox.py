@@ -1,7 +1,7 @@
 import logging
 import cv2
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
-
+import logging.config
 # Disable existing loggers to avoid conflicting messages
 logging.config.dictConfig({"version": 1, "disable_existing_loggers": True})
 
@@ -69,7 +69,7 @@ class Bbox:
         yB = min(boxA[3], boxB[3])
         return abs(max((xB - xA, 0)) * max((yB - yA), 0))
     
-    def draw_bbox_2_colors(bbox: list, img: cv2.Mat, text: str, colors: tuple(tuple)) -> None:
+    def draw_bbox_2_colors(bbox: list, img: cv2.Mat, text: str, colors: tuple) -> None:
         """
         Draws a white rectangle with a black outline around a bounding box and adds text if provided.
 

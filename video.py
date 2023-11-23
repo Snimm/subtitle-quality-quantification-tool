@@ -125,32 +125,24 @@ def analye_video(cam: cv2.VideoCapture, subbox: list, reader: easyocr.Reader, di
     frame_count = 0
     obs_arr = []
     ob_loc = []
-    subbox_given = True
-
-    # Check if subbox is provided
-    if subbox is None:
-        subbox_given = False
 
     # Process video frames
     while True:
         ret, frame = cam.read()
-
+        
         if ret:
             frame_count += 1
 
             # Process only every `every_what_frame` frames
             if frame_count % every_what_frame == 0:
-                # If no subbox provided, find it
-                if not subbox_given:
-                    subbox = subtitle.Subtitle.find_sub_box(frame)
-
+                logging.debug(f"frame width and height {frame.shape}")
                 # Calculate obstruction
                 obs = obstruction_from_image(frame, reader, subbox)
                 obs_arr.append(obs)
                 logging.debug(f"Obstruction: {obs}, Frame: {frame_count}")
 
                 # Create issue frames if necessary
-                if create_issue_frames and obs > 0.005:
+                if create_issue_frames and obs > 0:
                     ob_loc.append(frame_count)
                     frame = subtitle.Subtitle.show_sub(subbox, frame, display_image)
 

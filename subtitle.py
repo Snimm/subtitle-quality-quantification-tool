@@ -9,34 +9,43 @@ logging.config.dictConfig({
 })
 import bbox
 
+from subtitle_parser import srt
 
-class Subtitle:
-    @staticmethod
-    def get_position():  # Return 1 for top, -1 for bottom, or 0 for center
-        return 1  # Default to top position
+class Subtitle():
 
     @staticmethod
-    def find_sub_box(img):
-        logging.debug(f"Image shape: {img.shape}")
-        height = img.shape[0]
-        width = img.shape[1]
+    def get_position_top_down():  # Return 1 for top, -1 for bottom, or 0 for center
+        return -1  # Default to top position
 
-        # Assume the bottom 30% of the image contains the subtitle
-        subbox = [[[0, 0.7 * height], [width, 0.7 * height], [width, height], [0, height]]]
+    @staticmethod
+    def find_sub_box(img_dim, percent_start_width = 10, percent_end_width = 90, percent_start_height = 85, percent_end_height = 100):
+        logging.debug(f"Image shape: {img_dim}")
+        height = img_dim[1]
+        width = img_dim[0]
 
+        tl_x = percent_start_width*width*0.01
+        tr_x = percent_end_width*width*0.01
+        
         # Adjust the subbox position based on the configured position
-        position = Subtitle.get_position()
-        if position == -1:  # Bottom position
-            subbox[0][0][1] = 0.3 * height
-            subbox[0][1][1] = 0.3 * height
-            subbox[0][2][1] = 0
-            subbox[0][3][1] = 0
-        elif position == 0:  # Center position
-            subbox[0][0][1] = 0.4 * height
-            subbox[0][1][1] = 0.4 * height
-            subbox[0][2][1] = 0.6 * height
-            subbox[0][3][1] = 0.6 * height
+        position_top_bottom = Subtitle.get_position_top_down()
+        if position_top_bottom == -1:  # Bottom position
+                    # Assume the bottom 15% of the image contains the subtitle
+            tl_y = percent_start_height*height*0.01
+            br_y = percent_end_height*height*0.01
 
+        elif position_top_bottom == 1:  # top  position
+            # Assume the top 15% of the image contains the subtitle
+            tl_y = height - percent_end_height*height*0.01
+            br_y = height - percent_start_height*height*0.01
+
+        bl_x = tl_x
+        bl_y = br_y
+        tr_y = tl_y
+        br_x = tr_x
+
+        
+        subbox = [[[tl_x, tl_y], [tr_x, tr_y], [br_x, br_y], [bl_x, bl_y]]]
+        logging.debug(f"subbox_arr: {subbox}")
         return subbox
 
     @staticmethod
