@@ -1,7 +1,6 @@
-
 import logging
 logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s -  %(levelname)s -  %(message)s')
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 import cv2
 import logging.config
 logging.config.dictConfig({
@@ -11,27 +10,43 @@ logging.config.dictConfig({
 import bbox
 
 
-class Subtitle():
+class Subtitle:
     @staticmethod
-    def getPosition():#1 for top, -1 for bottom and array gives the actual position
-        return 1
+    def get_position():  # Return 1 for top, -1 for bottom, or 0 for center
+        return 1  # Default to top position
 
     @staticmethod
     def find_sub_box(img):
-        logging.debug(f"img shape {img.shape}")
+        logging.debug(f"Image shape: {img.shape}")
         height = img.shape[0]
         width = img.shape[1]
-        #assume bootom 30% of the image is the subtitle
-        return [[[0, .7*height], [width, .7*height], [width, height], [0, height]]]
-    
+
+        # Assume the bottom 30% of the image contains the subtitle
+        subbox = [[[0, 0.7 * height], [width, 0.7 * height], [width, height], [0, height]]]
+
+        # Adjust the subbox position based on the configured position
+        position = Subtitle.get_position()
+        if position == -1:  # Bottom position
+            subbox[0][0][1] = 0.3 * height
+            subbox[0][1][1] = 0.3 * height
+            subbox[0][2][1] = 0
+            subbox[0][3][1] = 0
+        elif position == 0:  # Center position
+            subbox[0][0][1] = 0.4 * height
+            subbox[0][1][1] = 0.4 * height
+            subbox[0][2][1] = 0.6 * height
+            subbox[0][3][1] = 0.6 * height
+
+        return subbox
+
     @staticmethod
     def show_sub(subbox, img, display):
         for ibbox in subbox:
-            bbox.Bbox.draw_white_black_rec(ibbox, img, None, ((0,0,0),(255,255,255)))
-        # show the output image
-        image = plt.gcf()
+            bbox.Bbox.draw_bbox_2_colors(ibbox, img, None, ((255, 0, 0), (0, 255, 0)))
+
+        # Show the output image
         plt.imshow(img)
         if display:
             plt.show()
-        return image
 
+        return img  # Return the image for further processing if needed

@@ -19,15 +19,24 @@ import video
 import bbox 
 
 
+import unittest
+import cv2
+import video
 
-class Testtext_extractor(unittest.TestCase):
+class TestTextExtractor(unittest.TestCase):
+
     def test_infer_from_model(self):
-        
-        reader = video.text_extractor.load_easyocr()
-        image = cv2.imread("./test_resource/text.jpeg")
-        details_from_image = video.text_extractor.infer_from_model(image, reader)
-        video.text_extractor.showb_details(details_from_image, image, True)
+        # Load the EasyOCR model
+        reader = video.TextExtractor.load_easyocr()
 
+        # Read the test image
+        image = cv2.imread("./test_resource/text.jpeg")
+
+        # Extract text from the image
+        details_from_image = video.TextExtractor.infer_from_model(image, reader)
+
+        # Display bounding boxes and text details
+        video.TextExtractor.show_bbox_details(details_from_image, image, True)
 
 if __name__ == '__main__':
     unittest.main()
