@@ -11,14 +11,15 @@ logging.config.dictConfig({
     'disable_existing_loggers': True,
 })
 
-import subtitle_parser
+
 import video
 import subtitle
-import search_sub
 
+from pysubparser import parser
+import search_sub
 # Define video path
 video_path = "./test_resource/GoTrascript_captions_samples.mp4"
-
+sub_path = "./test_resource/captions-example.srt"
 def main(video_path):
     # Capture video from file
     cam = cv2.VideoCapture(video_path)
@@ -29,6 +30,8 @@ def main(video_path):
     height_cam  = cam.get(cv2.CAP_PROP_FRAME_HEIGHT) 
     fps = cam.get(cv2.CAP_PROP_FPS)
     frame_count = cam.get(cv2.CAP_PROP_FRAME_COUNT)
+    subtitles = parser.parse(sub_path)
+    list_1sub = search_sub.create_sub_struct(subtitles, fps)
     print("Video details:")
     print(f"fps: {fps}, frame_count: {frame_count}, width: {width_cam} px, height: {height_cam} px, lenght: {frame_count/fps} sec")
 
@@ -36,7 +39,7 @@ def main(video_path):
     subbox_area = subtitle.Subtitle.get_general_sub_area(img_dim)
 
     # Analyze the video
-    video.analye_video(cam, subbox_area, reader, True, False, 500)
+    video.analye_video(cam, subbox_area, reader, True, False, 1, list_1sub )
 
 if __name__ == '__main__':
     # Run the main function

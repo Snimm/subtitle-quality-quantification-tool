@@ -38,12 +38,10 @@ class StrucSub:
         self.end = int(time_to_frames(end, fps))
         self.text = text
 
-def create_sub_struct(subtitles):
+def create_sub_struct(subtitles, fps):
     list_1sub = []
     for subtitle in subtitles:
-        print(f'{subtitle.start} > {subtitle.end}')
-        print(subtitle.text)
-        unitsub = StrucSub(subtitle.start, subtitle.end, subtitle.text, 24)
+        unitsub = StrucSub(subtitle.start, subtitle.end, subtitle.text, fps)
         list_1sub.append(unitsub)
     return list_1sub
 
@@ -54,17 +52,17 @@ def search_text_in_frame(frame:int, list_1sub:list) -> list:
     #! this function is incomplete and may have edge cases where certain 
     text_index = {}
     for i, unitsub in enumerate(list_1sub):
-        logging.debug(f"index: {i},  start: {unitsub.start}, end: {unitsub.end} text {unitsub.text}")
-        if unitsub.end > frame and unitsub.start < frame:
+        
+        if unitsub.end < frame:
+            continue
+
+        elif unitsub.end > frame and unitsub.start < frame:
             text_index[i] = unitsub.text
+            logging.debug(f"index: {i},  start: {unitsub.start}, end: {unitsub.end} text {unitsub.text}")
             continue
 
         elif unitsub.end > frame and unitsub.start > frame:
             break
-
-        elif unitsub.end < frame:
-            #end the loop as searching is point less now
-            continue
 
     return text_index
 

@@ -8,7 +8,7 @@ logging.config.dictConfig({
     'disable_existing_loggers': True,
 })
 import bbox
-
+import search_sub
 
 class Subtitle():
 
@@ -46,6 +46,12 @@ class Subtitle():
         subbox = [[[tl_x, tl_y], [tr_x, tr_y], [br_x, br_y], [bl_x, bl_y]]]
         logging.debug(f"subbox_arr: {subbox}")
         return subbox
+
+    # def get_subbox(gen_subbox_area, frame, subtitle):
+    #     list_1sub = []
+    #     text = search_sub.search_text_in_frame(132, list_1sub)
+    #     print(text)
+
 
     @staticmethod
     def show_sub(subbox, img, display):

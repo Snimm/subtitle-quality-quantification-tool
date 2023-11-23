@@ -14,7 +14,7 @@ logging.config.dictConfig({
 # Import custom modules
 import bbox
 import subtitle
-
+import search_sub
 # Define text extractor class
 class TextExtractor:
     @staticmethod
@@ -111,7 +111,7 @@ def obstruction_from_image(img: cv2.Mat, reader: easyocr.Reader, subbox: list) -
     return relative_obstruction
 
 # Define video analysis function
-def analye_video(cam: cv2.VideoCapture, subbox: list, reader: easyocr.Reader, display_image: bool, save_image: bool, every_what_frame: int) -> list:
+def analye_video(cam: cv2.VideoCapture, subbox: list, reader: easyocr.Reader, display_image: bool, save_image: bool, every_what_frame: int, list_1sub:list) -> list:
     issue_frames = []
     create_issue_frames = True
 
@@ -135,11 +135,13 @@ def analye_video(cam: cv2.VideoCapture, subbox: list, reader: easyocr.Reader, di
 
             # Process only every `every_what_frame` frames
             if frame_count % every_what_frame == 0:
-                logging.debug(f"frame width and height {frame.shape}")
+
+                text = search_sub.search_text_in_frame(frame_count,list_1sub)
+                #if there is not text set subbox to 0s
+                if len(text) == 0:
+                    subbox = [[[0, 0], [0, 0], [0, 0], [0, 0]]]
+                logging.debug(f"subbox after potential reset: {subbox}")
                 # Calculate obstruction
-            
-
-
                 obs = obstruction_from_image(frame, reader, subbox)
                 obs_arr.append(obs)
                 logging.debug(f"Obstruction: {obs}, Frame: {frame_count}")
