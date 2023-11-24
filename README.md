@@ -4,7 +4,7 @@ Subtitle Analysis Tool
 
 ## Overview
 
-This tool provides functionality for analyzing videos to identify subtitle obstruction. It includes two main commands: `main` for analyzing videos for subtitle obstruction and `get-video-details` for extracting video details such as FPS, frame count, width, and height.
+This tool provides functionality for analysing subtitle. It checks if the subtitle and the text present in the video overlap. It includes two main commands: `main` for analyzing videos for subtitle obstruction and `get-video-details` for extracting video details such as FPS, frame count, width, and height.
 
 ## Installation
 
@@ -48,10 +48,10 @@ python main.py main [OPTIONS] VIDEO_PATH SUB_PATH
 #### Options:
 
 - `--percentage-width-covered-by-sub FLOAT`: Percentage of video width covered by subtitles (default: 85).
-- `--percentage-height-covered-by-sub FLOAT`: Percentage of video height covered by subtitles (default: 15).
+- `--percentage-height-covered-by-sub FLOAT`: Percentage of video height covered by subtitles (default: 15). It is assumed that the subtitles are present at the very bottom of the video.
 - `--display-images-with-issue / --no-display-images-with-issue`: Display images with subtitle obstruction (default: display-images-with-issue).
-- `--save-images-with-issue / --no-save-images-with-issue`: Save images with subtitle obstruction (default: no-save-images-with-issue).
-- `--number-of-frames-to-analyze INTEGER`: Number of frames to analyze (default: 10).
+- `--save-images-with-issue / --no-save-images-with-issue`: Save images with subtitle obstruction (default: no-save-images-with-issue). Images are saved in `position_issue_frames` folder. 
+- `--number-of-frames-to-analyze INTEGER`: Number of frames to analyze (default: 10). Frames that are analysed are distributed evenly across the video. 
 - `--help`: Show this message and exit.
 
 ### `get-video-details` Command
