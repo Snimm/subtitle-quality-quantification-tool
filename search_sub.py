@@ -60,18 +60,8 @@ def search_text_in_frame(frame: int, subtitle_list: list) -> dict:
     return text_index
 
 
-# subtitles = parser.parse("./test_resource/captions-example.srt")
-
-
-
-
-
-
-
-
 def search_text_in_frame(frame:int, list_1sub:list) -> list:
 
-    #! this function is incomplete and may have edge cases where certain 
     text_index = {}
     for i, unitsub in enumerate(list_1sub):
         
@@ -80,7 +70,6 @@ def search_text_in_frame(frame:int, list_1sub:list) -> list:
 
         elif unitsub.end > frame and unitsub.start < frame:
             text_index[i] = unitsub.text
-            #logging.debug(f"index: {i},  start: {unitsub.start}, end: {unitsub.end} text {unitsub.text}")
             continue
 
         elif unitsub.end > frame and unitsub.start > frame:

@@ -18,8 +18,7 @@ class TestSubSearch(unittest.TestCase):
 
     def setUp(self):
         # Define subtitle and video paths
-        subtitle_path = "/home/sonnet/ihavenotidea/test_resource/captions-example.srt"
-        video_path = "/home/sonnet/ihavenotidea/test_resource/GoTrascript_captions_samples.mp4"
+
 
         # Capture video stream
         self.cam = cv2.VideoCapture(video_path)
@@ -41,4 +40,8 @@ class TestSubSearch(unittest.TestCase):
         self.assertEqual(actual_text, expected_text)
 
 if __name__ == '__main__':
+    #"./test_resource/captions-example.srt"
+    #"./test_resource/GoTrascript_captions_samples.mp4"
+    subtitle_path = input("Enter the path to the subtitle file: ")
+    video_path = input("Enter the path to the video file: ")
     unittest.main()

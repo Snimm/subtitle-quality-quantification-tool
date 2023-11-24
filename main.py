@@ -6,7 +6,7 @@ import math
 # Configure logging
 logging.basicConfig(level=logging.WARNING, format=' %(asctime)s -  %(levelname)s -  %(message)s')
 import logging.config
-#For some improting logging is not enough to import logging.config, it needs to be imported explicitly
+#For some reason, improting logging is not enough to import logging.config, it needs to be imported explicitly
 logging.config.dictConfig({
     'version': 1,
     'disable_existing_loggers': True,
@@ -67,7 +67,7 @@ def main(video_path: str, sub_path: str, percentage_width_covered_by_sub: float 
 
     # Calculate every nth frame to analyze based on the specified number of frames
     every_nth_frame_to_analyze = math.ceil(frame_count / number_of_frames_to_analyze)
-    logging.debug(f"Every nth frame to analyze: {every_nth_frame_to_analyze}")
+    print(f"Every nth frame to analyze: {every_nth_frame_to_analyze}")
 
     # Define subtitle box area based on percentages
     img_dim = (height_cam, width_cam)
