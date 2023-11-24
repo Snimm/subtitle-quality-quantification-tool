@@ -19,8 +19,15 @@ class Subtitle():
         return -1  # Default to bottom position
 
     @staticmethod
-    def get_general_sub_area(video_dimensions: tuple, percent_start_width: float = 10.0, percent_end_width: float = 90.0, percent_start_height: float = 85.0, percent_end_height: float = 100.0):        
+    def get_general_sub_area(video_dimensions: tuple, percentage_width_covered_by_sub:float,  percentage_height__covered_by_sub:float):  
         """Calculates the general subtitle area based on specified percentages"""
+        percent_start_width = (100-percentage_width_covered_by_sub)/2
+        percent_end_width = 100 - percent_start_width
+        percent_start_height = (100-percentage_height__covered_by_sub)
+        percent_end_height = 100 
+        percent_start_height = 85.0
+       
+
         height, width = video_dimensions
 
         tl_x = percent_start_width*width*0.01
@@ -49,7 +56,7 @@ class Subtitle():
 
         # Construct the subtitle box using the calculated coordinates
         subbox = [[[tl_x, tl_y], [tr_x, tr_y], [br_x, br_y], [bl_x, bl_y]]]
-        logging.debug(f"subbox_arr: {subbox}")
+        #logging.debug(f"subbox_arr: {subbox}")
         return subbox
 
     def get_subbox(gen_subbox_area, frame, subtitle):

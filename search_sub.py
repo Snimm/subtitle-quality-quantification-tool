@@ -51,7 +51,7 @@ def search_text_in_frame(frame: int, subtitle_list: list) -> dict:
 
         elif subtitle_object.end > frame and subtitle_object.start <= frame:  # Subtitle is ongoing
             text_index[i] = subtitle_object.text
-            logging.debug(f"index: {i}, start: {subtitle_object.start}, end: {subtitle_object.end}, text: {subtitle_object.text}")
+            #logging.debug(f" frame {frame} index: {i}, start: {subtitle_object.start}, end: {subtitle_object.end}, text: {subtitle_object.text}")
             continue
 
         elif subtitle_object.end > frame and subtitle_object.start > frame:  # Subtitle has not yet started
@@ -80,7 +80,7 @@ def search_text_in_frame(frame:int, list_1sub:list) -> list:
 
         elif unitsub.end > frame and unitsub.start < frame:
             text_index[i] = unitsub.text
-            logging.debug(f"index: {i},  start: {unitsub.start}, end: {unitsub.end} text {unitsub.text}")
+            #logging.debug(f"index: {i},  start: {unitsub.start}, end: {unitsub.end} text {unitsub.text}")
             continue
 
         elif unitsub.end > frame and unitsub.start > frame:

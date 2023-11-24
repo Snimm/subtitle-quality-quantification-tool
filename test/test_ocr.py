@@ -28,9 +28,11 @@ class TestTextExtractor(unittest.TestCase):
     def test_infer_from_model(self):
         # Load the EasyOCR model
         reader = video.TextExtractor.load_easyocr()
+        
+        image_path = "./test_resource/text.jpeg"
 
         # Read the test image
-        image = cv2.imread("./test_resource/text.jpeg")
+        image = cv2.imread(image_path)
 
         # Extract text from the image
         details_from_image = video.TextExtractor.infer_from_model(image, reader)
