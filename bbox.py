@@ -133,30 +133,23 @@ class Bbox:
             The total area of the obstructed text.
         """
 
-        #logging.debug(f"Sub-box array: {sub_box_array}")
-        #logging.debug(f"Details: {details}")
-
+    
         # Get a list of bounding boxes from details
         txt_box_array = Bbox.get_bbox_from_details(details)
-        #logging.debug(f"Text box array: {txt_box_array}")
-
         total_obstruction = 0  # Initialize total obstruction area
 
         # Iterate over each sub-box
         for sub_box in sub_box_array:
             # Compress the sub-box into a 2-point representation
             sub_box = Bbox.compress_bbox(sub_box)
-            #logging.debug(f"Compressed sub-box: {sub_box}")
 
             # Iterate over each text box
             for txt_box in txt_box_array:
                 # Compress the text box into a 2-point representation
                 txt_box = Bbox.compress_bbox(txt_box)
-                #logging.debug(f"Compressed text box: {txt_box}")
 
                 # Calculate the area of intersection between the sub-box and the text box
                 intersection_area = Bbox.bbox_intersection(sub_box, txt_box)
-                #logging.debug(f"Intersection area: {intersection_area}")
 
                 # Update the total obstruction area
                 total_obstruction += intersection_area

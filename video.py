@@ -113,59 +113,67 @@ def obstruction_from_image(img: cv2.Mat, reader: easyocr.Reader, subbox: list) -
 # Define video analysis function
 def analye_video(cam: cv2.VideoCapture, subbox: list, reader: easyocr.Reader, display_image: bool, save_image: bool, every_what_frame: int, list_1sub:list) -> list:
     
-    logging.debug(f"init __ subbox: {subbox} ")
+    logging.info("Starting video analysis")
+    logging.debug(f"Initial subtitle box: {subbox}")
+
     issue_frames = []
     create_issue_frames = True
 
-    # Create a folder to store frames with position issues
     try:
         if not os.path.exists(f'./position_issue_frames'):
             os.makedirs(f'./position_issue_frames')
-    except OSError:
+            logging.info("Created directory for position issue frames")
+    except OSError as e:
         print('Error: Creating directory of position_issue_frames')
+        logging.error(e)
 
     frame_count = 0
     obs_arr = []
     ob_loc = []
-    
+
     # Process video frames
     while True:
 
         subbox_for_i_frame = subbox.copy()
         ret, frame = cam.read()
-        
+
         if ret:
             frame_count += 1
 
             # Process only every `every_what_frame` frames
             if frame_count % every_what_frame == 0:
-                logging.debug(f"subbox : {subbox_for_i_frame} at frame {frame_count} ")
-                text = search_sub.search_text_in_frame(frame_count,list_1sub)
-                #if there is no text set subbox to 0s
+                logging.debug(f"Processing frame {frame_count}")
+
+                # Extract text in the current frame
+                text = search_sub.search_text_in_frame(frame_count, list_1sub)
+
+                # If no text is found, reset the subtitle box to zeros
                 if len(text) == 0:
-                    logging.debug(f"no text in frame: {frame_count}")
+                    logging.debug("No text found in frame, resetting subtitle box")
                     subbox_for_i_frame = [[[0, 0], [0, 0], [0, 0], [0, 0]]]
 
-                logging.debug(f"subbox : {subbox_for_i_frame} after potential reset {frame_count} ")
-                #logging.debug(f"subbox after potential reset: {subbox}")
+                logging.debug(f"Updated subtitle box: {subbox_for_i_frame}")
+
                 # Calculate obstruction
                 obs = obstruction_from_image(frame, reader, subbox_for_i_frame)
                 obs_arr.append(obs)
-                logging.debug(f"Obstruction: {obs}, Frame: {frame_count}, time {frame_count/cam.get(cv2.CAP_PROP_FPS)} sec")
+                logging.debug(f"Obstruction: {obs}, Frame: {frame_count}, Time: {frame_count / cam.get(cv2.CAP_PROP_FPS)} sec")
 
                 if obs > 0:
-                    print(f"test obstruction issue in frame {frame_count}, time {frame_count/cam.get(cv2.CAP_PROP_FPS)} sec")
+                    logging.warning(f"Obstruction issue detected in frame {frame_count}, Time: {frame_count / cam.get(cv2.CAP_PROP_FPS)} sec")
                     issue_frames.append(frame_count)
-    
+
                 # Create issue frames if necessary
                 if create_issue_frames and obs > 0:
                     ob_loc.append(frame_count)
                     frame = subtitle.Subtitle.show_sub(subbox_for_i_frame, frame, display_image)
 
                     if save_image:
+                        logging.debug(f"Saving issue frame {frame_count}")
                         frame.savefig(f"./position_issue_frames/frame_{frame_count}.png", bbox_inches='tight')
 
         else:
+            logging.info("Video analysis complete")
             break
 
     # Release camera object
@@ -173,7 +181,5 @@ def analye_video(cam: cv2.VideoCapture, subbox: list, reader: easyocr.Reader, di
 
     # Calculate average obstruction
     avg_obs_frame = sum(obs_arr) / len(obs_arr)
-    # logging.debug(f"Average obstruction per frame: {avg_obs_frame}")
-    # logging.debug(f"Subbox: {subbox}")
+    logging.debug(f"Average obstruction per frame: {avg_obs_frame}")
     return issue_frames
-
