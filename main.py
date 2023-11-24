@@ -39,11 +39,11 @@ def get_video_details(video_path: str):
     # Display video details
     print("Video details:")
     logging.debug(f"Video path: {video_path}")
-    logging.debug(f"FPS: {fps}")
-    logging.debug(f"Frame count: {frame_count}")
-    logging.debug(f"Width: {width_cam} px")
-    logging.debug(f"Height: {height_cam} px")
-    logging.debug(f"Length: {frame_count / fps} sec")
+    print(f"FPS: {fps}")
+    print(f"Frame count: {frame_count}")
+    print(f"Width: {width_cam} px")
+    print(f"Height: {height_cam} px")
+    print(f"Length: {frame_count / fps} sec")
 
     return cam, fps, frame_count, width_cam, height_cam
 
